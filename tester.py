@@ -51,7 +51,9 @@ while True:
 
     #combine inputs for the agent
     input_to_agent = genre_binary + theme_binary + comp_title_binary
-    agent.next_state(input_to_agent, print_result=True)
+    
+    for i in range(5):
+        agent.next_state(input_to_agent, print_result=True)
     recommendation_result = input("Did you like the recommendation (y/n)? ")
 
     opposite_array = distance_calculation(genre_id, theme_id, comp_title_id)
@@ -61,12 +63,11 @@ while True:
         label = [1] 
     else:
         label = [0]
-    agent.next_state(input_to_agent, LABEL=label, print_result=True)
+    agent.next_state(input_to_agent, LABEL=label)
 
-    
+
     print("Opposite array:", opposite_array) 
-    agent.next_state(input_to_agent, LABEL = [0], print_result = True)
+    agent.next_state(input_to_agent, LABEL = [0])
 
-    if input("Continue? (y/n): ").lower() == "n":
-        break
+
 
