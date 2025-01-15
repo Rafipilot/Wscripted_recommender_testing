@@ -10,9 +10,9 @@ for i in range(20):
             list_of_all_combs.append([i,j,k])
 
 agent = ao.Agent(arch)
-for i in range(4):
-    agent.reset_state()
-    agent.reset_state(training=True)
+# for i in range(4):
+#     agent.reset_state()
+#     agent.reset_state(training=True)
 
 num_binary_digits = 5
 
@@ -22,27 +22,39 @@ def get_binary(id):
 
 def distance_calculation(genre_id, theme_id, comp_title_id):
     max_distance = -1
-    furthest_comb = None
+    farthest_points = []
+
 
     for comb in list_of_all_combs:
         x, y, z = comb
         # Calculate Euclidean distance
         distance = math.sqrt((x - genre_id) ** 2 + (y - theme_id) ** 2 + (z - comp_title_id) ** 2)
+        # print(distance)
         
         # Track the furthest combination
         if distance > max_distance:
             max_distance = distance
-            furthest_comb = comb
+    
 
-    return furthest_comb
+    for comb in list_of_all_combs:
+        x, y, z = comb
+        distance = math.sqrt((x - genre_id) ** 2 + (y - theme_id) ** 2 + (z - comp_title_id) ** 2)
+        if distance == max_distance:
+            farthest_points.append(comb)
+
+    return farthest_points
 
 #Main loop
 while True:
-
+    training = input("You want to train (y/n) : ")
     # Get user input
     genre_id = int(input("Genre ID: "))
     theme_id = int(input("Theme ID: "))
     comp_title_id = int(input("Comp Title ID: "))
+
+    if training.lower() == 'y':
+        label = int(input("Lavel to agent ( 0 -don't recommed / 1 -recommed): "))
+        label = [label]
 
     #convert inputs to binary
     genre_binary = get_binary(genre_id)
@@ -51,23 +63,34 @@ while True:
 
     #combine inputs for the agent
     input_to_agent = genre_binary + theme_binary + comp_title_binary
+
+    if training.lower() != 'y': #testing
+        for i in range(5):
+            agent.next_state(input_to_agent, print_result=True)
+        recommendation_result = input("Did you like the recommendation (y/n)? ")
+
+        if recommendation_result.lower() == "y":
+            label = [1]
+        else:
+            abel = [0]
+        agent.next_state(input_to_agent, LABEL=label)
     
-    for i in range(5):
-        agent.next_state(input_to_agent, print_result=True)
-    recommendation_result = input("Did you like the recommendation (y/n)? ")
+   
+    if training.lower() == 'y': #training
+        
+        opposite_array = distance_calculation(genre_id, theme_id, comp_title_id)
+        for i in range(5):
+            agent.reset_state()
+            agent.next_state(input_to_agent, LABEL=label, metadata=False)
+            agent.reset_state()
+            agent.next_state(input_to_agent, LABEL = [label[0]^1], metadata=False)
+            
 
-    opposite_array = distance_calculation(genre_id, theme_id, comp_title_id)
-    
+        
+        print(opposite_array)
 
-    if recommendation_result.lower() == "y":
-        label = [1] 
-    else:
-        label = [0]
-    agent.next_state(input_to_agent, LABEL=label)
-
-
-    print("Opposite array:", opposite_array) 
-    agent.next_state(input_to_agent, LABEL = [0])
+        print("Opposite array:", opposite_array) 
+        
 
 
 
