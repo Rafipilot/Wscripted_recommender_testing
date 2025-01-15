@@ -1,10 +1,10 @@
 
 import ao_arch as ar
 
-description = "Basic Recommender System"
+description = "Wscripter tester"
 
 #genre, length
-arch_i = [5, 5, 5]   # genre_binary_encoding + length_binary + fnf_binary + mood_binary
+arch_i = [5, 5, 5]   # genre_binary_encoding + theme+ comp title
 arch_z = [1]           
 arch_c = []           
 connector_function = "full_conn"
