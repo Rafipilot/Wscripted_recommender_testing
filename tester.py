@@ -53,7 +53,9 @@ while True:
     theme_id = int(input("Theme ID: "))
     comp_title_id = int(input("Comp Title ID: "))
 
-
+    if training.lower() == 'y':
+        label = int(input("Lavel to agent ( 0 -don't recommed / 1 -recommed): "))
+        label = [label]
 
     #convert inputs to binary
     genre_binary = get_binary(genre_id)
@@ -62,14 +64,6 @@ while True:
 
     #combine inputs for the agent
     input_to_agent = genre_binary + theme_binary + comp_title_binary
-
-    response = agent.next_state(input_to_agent)
-    print("Agent response: ", response)
-
-
-    if training.lower() == 'y':
-        label = int(input("Lavel to agent ( 0 -don't recommed / 1 -recommed): "))
-        label = [label]
 
     if training.lower() != 'y': #testing
         for i in range(5):
@@ -89,8 +83,7 @@ while True:
         for i in range(5):
             agent.reset_state()
             agent.next_state(input_to_agent, LABEL=label)
-            agent.reset_state()
-            agent.next_state(input_to_agent, LABEL = [label[0]^1])
+
             
 
         
@@ -98,6 +91,3 @@ while True:
 
         print("Opposite array:", opposite_array) 
         
-
-
-
