@@ -10,6 +10,7 @@ for i in range(20):
             list_of_all_combs.append([i,j,k])
 
 agent = ao.Agent(arch)
+agent.reset_state(training=True)
 # for i in range(4):
 #     agent.reset_state()
 #     agent.reset_state(training=True)
@@ -87,9 +88,9 @@ while True:
         opposite_array = distance_calculation(genre_id, theme_id, comp_title_id)
         for i in range(5):
             agent.reset_state()
-            agent.next_state(input_to_agent, LABEL=label, metadata=False)
+            agent.next_state(input_to_agent, LABEL=label)
             agent.reset_state()
-            agent.next_state(input_to_agent, LABEL = [label[0]^1], metadata=False)
+            agent.next_state(input_to_agent, LABEL = [label[0]^1])
             
 
         
